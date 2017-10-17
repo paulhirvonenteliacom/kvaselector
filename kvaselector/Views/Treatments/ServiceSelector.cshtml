@@ -1,0 +1,35 @@
+﻿@model kvaselector.Viewmodels.ServiceSelectorVM
+
+@using (Html.BeginForm("CodeSelectorII", "Treatments", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <p class="page-title" title="Välj vårdtjänst från listan.">Val av vårdtjänst</p>
+    <br />
+    <h2>Vårdtjänster</h2>
+    <div class="row">
+        <div class="col col-lg-3">
+            @Html.DropDownListFor(model => model.SelectedServiceTypeId, new SelectList(@Model.ServiceType, "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ServiceType, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-10">
+            <input type="submit" value="Gå vidare till kodval" class="btn btn-default" />
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div>
+        <p>@Model.ApplicationPurpose</p>
+        <p class="source-document">@Model.SourceDocumentTitleLine1</p>
+        <p class="source-document">@Model.SourceDocumentTitleLine2</p>
+        <p class="source-document">@Model.SourceDocumentTitleLine3</p>
+        <p>@Model.SourceValidFrom</p>
+        <p>@Model.SourceComplianceStatement</p>
+    </div>
+}
+

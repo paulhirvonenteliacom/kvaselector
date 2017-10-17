@@ -1,0 +1,51 @@
+﻿@model kvaselector.Viewmodels.CodeSelectorVM
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <p class="page-title" title="Välj koder från listorna. Granska sedan med 'Granska kodval'.">Kodval</p>
+    <br />
+    <h2>Diagnoskoder</h2>
+        <div class="row">
+            @for (int i = 0; i < Model.NoOfDiagnosisCodes; i++)
+            {
+                <div class="col col-lg-3">
+                    @Html.DropDownListFor(model => model.SelectedDiagnosisId[i], new SelectList(@Model.Diagnosis[i], "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Diagnosis[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+        <br />
+
+        <h2>Åtgärdskoder</h2>
+        <div class="row">
+            @for (int i = 0; i < Model.NoOfTreatmentCodes; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TypeName[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTypeId[i], new SelectList(@Model.Type[i], "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+        <br />
+        @*<div>
+                @Html.ActionLink("Spara koder", "SaveCodes", "Treatments", new
+                {
+                    selectedDiagnosisId = Model.SelectedDiagnosisId,
+                    diagnosis = Model.Diagnoses,
+                    selectedTypeId = Model.SelectedTypeId,
+                    type = Model.Type,
+                    typeName = Model.TypeName
+                },
+                    new { @class = "btn btn-default" })
+            </div>*@
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-10">
+                <input type="submit" value="Granska kodval" class="btn btn-default" />
+            </div>
+        </div>
+}

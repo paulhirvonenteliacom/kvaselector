@@ -1,0 +1,205 @@
+﻿@model kvaselector.Viewmodels.CodeSelectorIIVM
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.NoOfDiagnosisCodes)
+    @Html.HiddenFor(model => model.NoOfTreatmentCodes)
+    @Html.HiddenFor(model => model.NoOfCheckedTreatmentLists)
+    <br />
+    <p class="page-title" title="Välj koder från listorna. Granska sedan med 'Granska kodval'.">Kodval</p>
+    <p class="sub-title" title="@Model.ServiceDescription.ToString()">Vårdtjänst: @Model.ServiceName</p>
+    <hr />
+    @*WORK IN PROGRESS*@
+    @*<h2>@Model.FavoriteHeading</h2>
+        <form method="GET" action="/Treatments/CodeSelectorII" style="float:left">
+            <div class="btn-group" data-toggle="buttons">
+                @for (int i = 0; i < @Model.FavoriteRB.Count(); i++)
+                {
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> @Model.FavoriteRB[i]
+                    </label>
+                }
+
+
+                <label class="btn btn-secondary active">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Radio 1 (preselected)
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Radio 2
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Radio 3
+                </label>
+            </div>
+        </form>
+
+        <div class="row">
+                <div class="col col-lg-3">
+                    @Html.DropDownListFor(model => model.SelectedFavoriteId, new SelectList(@Model.Favorite, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Favorite, null, new { @class = "text-danger" })
+                </div>
+        </div>
+        <br>
+        <hr />*@
+    <h2>Diagnoskoder</h2>
+    <p class="code-remark">@Model.DiagnosisCodeRemark</p>
+    <div class="row">
+        @for (int i = 0; i < Model.NoOfDiagnosisCodes; i++)
+        {
+            <div class="col col-lg-3">
+                <h4>@Model.DiagnosisCodeHeading[i]</h4>
+                @Html.DropDownListFor(model => model.SelectedDiagnosisId[i], new SelectList(@Model.Diagnosis[i], "Value", "Text", Model.PreSelectedDiagnosisId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Diagnosis[i], null, new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+    <br>
+    <hr />
+    <h2>Åtgärdskoder</h2>
+
+    //If a certain type of KVÅ-kod is given special emphasize in the "Rapporteringsanvisning", then it is listed on its' own row and 8 other lists are
+    //shown on subsequent rows with maximum 4 lists in each row. If no special emphasize is given to any type of KVÅ-kod, then they are shown on two rows
+    //with maximum 4 lists in each row.
+    if (Model.NoOfTreatmentCodes <= 4)
+    {
+        <p class="code-remark">@Model.TreatmentCodeRemark</p>
+        <div class="row">
+            @for (int i = 0; i < Model.NoOfTreatmentCodes; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TreatmentCodeHeading[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+    }
+    else if (Model.NoOfTreatmentCodes == 8)
+    {
+        <p class="code-remark">@Model.TreatmentCodeRemark</p>
+        <div class="row">
+            @for (int i = 0; i < 4; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TreatmentCodeHeading[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+        <br />
+        <div class="row">
+            @for (int i = 4; i < Model.NoOfTreatmentCodes; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TreatmentCodeHeading[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+    }
+    else if (Model.NoOfTreatmentCodes == 9)
+    {
+        <h4>@Model.TreatmentCodeHeading[0]</h4>
+        <div class="row">
+            @for (int i = 0; i < 1; i++)
+            {
+                <div class="col col-lg-3">
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+
+        <br />
+        <p class="code-remark">@Model.TreatmentCodeRemark</p>
+        <div class="row">
+            @for (int i = 1; i < 5; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TreatmentCodeHeading[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+        <br />
+        <div class="row">
+            @for (int i = 5; i < Model.NoOfTreatmentCodes; i++)
+            {
+                <div class="col col-lg-3">
+                    <h4>@Model.TreatmentCodeHeading[i]</h4>
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text", Model.PreSelectedTreatmentId[i]), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                </div>
+            }
+        </div>
+    }
+    <br />
+
+    for (int i = 0; i < Model.NoOfCheckedTreatmentLists; i++)
+    {
+        <hr />
+        <h4>@Model.CheckedTreatmentHeading[i]</h4>
+        for (int j = 0; j < Model.CheckedTreatment[i].Count(); j++)
+        {
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="floating-checkbox">@Html.CheckBoxFor(model => model.CheckedTreatment[i][j].Checked, new { @class = "form-control", @checked = true })</div>
+                    <div class="floating-text">@Html.DisplayFor(model => model.CheckedTreatment[i][j].CheckboxTreatment)</div>
+                </div>
+            </div>
+        }
+    }
+    <br />
+    <br />
+    <hr />
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-10">
+            <input type="submit" value="Granska kodval" class="btn btn-default" />
+        </div>
+    </div>
+
+    @*if (Model.NoOfTreatmentCodes == 9)
+        {
+            <h4>@Model.TreatmentCodeHeading[0]</h4>
+            <div class="row">
+                <div class="col col-lg-3">
+                    @Html.DropDownListFor(model => model.SelectedTreatmentId[0], new SelectList(@Model.Treatment[0], "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Treatment[0], null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+
+            <p>@Model.TreatmentCodeRemark</p>
+            <div class="row">
+                @for (int i = 1; i < Model.NoOfTreatmentCodes; i++)
+                {
+                    <div class="col col-lg-3">
+                        <h4>@Model.TreatmentCodeHeading[i]</h4>
+                        @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>@Model.TreatmentCodeRemark</p>
+            <div class="row">
+                @for (int i = 0; i < Model.NoOfTreatmentCodes; i++)
+                {
+                    <div class="col col-lg-3">
+                        <h4>@Model.TreatmentCodeHeading[i]</h4>
+                        @Html.DropDownListFor(model => model.SelectedTreatmentId[i], new SelectList(@Model.Treatment[i], "Value", "Text"), "Ingen vald", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Treatment[i], null, new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+            <br />
+        }*@
+}

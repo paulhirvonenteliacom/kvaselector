@@ -1,0 +1,136 @@
+﻿@model kvaselector.Viewmodels.ConfirmCodesVM
+@{
+    string[] diagnosisCodes = new string[Model.noOfDiaCodePositionsInOutput];
+    string[] diagnosisDescriptions = new string[Model.noOfDiaCodePositionsInOutput];
+    string[] treatmentCodes = new string[Model.noOfTreCodePositionsInOutput];
+    string[] treatmentDescriptions = new string[Model.noOfTreCodePositionsInOutput];
+    bool[] favoriteRadioButtons = new bool[Model.NoOfRadioButtons];
+    string[] favRadioButtons = new string[Model.NoOfRadioButtons];
+    //int ServiceTypeId;
+    //int?[] diagnosisCodeIds = new int?[Model.noOfDiaCodePositionsInOutput];
+    //int?[] treatmentCodeIds = new int?[Model.noOfTreCodePositionsInOutput];
+    //string[] checkedTreatments = new string[4];
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    //These properties are used for storing the latest code combination in the database
+    @*@Html.HiddenFor(model => model.SelectedDiagnosisId);
+        @Html.HiddenFor(model => model.SelectedTypeId);
+        @Html.HiddenFor(model => model.ServiceTypeId);
+        @Html.HiddenFor(model => model.CheckedTreatment);*@
+    <br />
+    <p class="page-title" title="Granska kodvalet. Bekräfta och spara sedan med 'Bekräfta kodval'.">@Model.PageHeader</p>
+    <br />
+    @*<hr/>*@
+    <div>
+        <h2>@Model.DiagnosisHeader</h2>
+        <table class="table">
+            <tr>
+                <th class="table-code-col">
+                    Diagnoskod
+                </th>
+                <th>
+                    Beskrivning
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.NoOfDiagnosisCodes; i++)
+            {
+                <tr>
+                    <td class="table-code-col">
+                        @Model.SelectedDiagnosisCodes[i]
+                    </td>
+                    <td>
+                        @Model.SelectedDiagnosisDescriptions[i]
+                    </td>
+                </tr>
+                diagnosisCodes[i] = Model.SelectedDiagnosisCodes[i];
+                diagnosisDescriptions[i] = Model.SelectedDiagnosisDescriptions[i];
+            }
+        </table>
+    </div>
+
+    <div>
+        <h2>@Model.TreatmentHeader</h2>
+        <table class="table">
+            <tr>
+                <th class="table-code-col">
+                    Åtgärdskod
+                </th>
+                <th>
+                    Beskrivning
+                </th>
+            </tr>
+            @for (int j = 0; j < Model.NoOfTreatmentCodes; j++)
+            {
+                <tr>
+                    <td class="table-code-col">
+                        @Model.SelectedTreatmentCodes[j]
+                    </td>
+                    <td>
+                        @Model.SelectedTreatmentDescriptions[j]
+                    </td>
+                </tr>
+                treatmentCodes[j] = Model.SelectedTreatmentCodes[j];
+                treatmentDescriptions[j] = Model.SelectedTreatmentDescriptions[j];
+            }
+        </table>
+    </div>
+    @*WORK IN PROGRESS*@
+    @*<div>
+            @for (int i = 0; i < Model.NoOfRadioButtons; i++)
+            {
+                <p>@Html.RadioButtonFor(model => model.FavoriteChoice[i].Selected, Model.FavoriteChoice[i].FavoriteName)  Spara som  @Model.FavoriteChoice[i].FavoriteName</p>
+                favoriteRadioButtons[i] = Model.FavoriteChoice[i].Selected;
+            }
+        </div>*@
+    @*<div>
+        @for (int i = 0; i < Model.NoOfRadioButtons; i++)
+        {
+            @*<p>@Html.RadioButtonFor(model => model.SelectedFavoriteId[i], Model.FavoriteChoices[i].Id, new { id = Model.FavoriteChoices[i].Id })  Spara som  @Model.FavoriteChoices[i].FavoriteName</p>*@
+    @*<p>@Html.RadioButtonFor(model => model.SelectedFavorite[i], Model.FavoriteChoices[i].Id, false)  Spara som  @Model.FavoriteChoices[i].FavoriteName</p>
+                if (Model.SelectedFavorite[i])
+                {
+                    favRadioButtons[i] = 1.ToString();
+                }
+                else
+                {
+                    favRadioButtons[i] = 0.ToString();
+                }
+            }
+        </div>*@
+    <br />
+    <div>
+        @Html.ActionLink("Bekräfta kodval", "SaveConfirmedCodes", "Treatments", new
+   {
+       noOfDiaCodes = Model.NoOfDiagnosisCodes,
+       diaCodes = Json.Encode(diagnosisCodes),
+       diaDescriptions = Json.Encode(diagnosisDescriptions),
+       noOfTreCodes = Model.NoOfTreatmentCodes,
+       treCodes = Json.Encode(treatmentCodes),
+       treDescriptions = Json.Encode(treatmentDescriptions),
+       diaCodeIds = Json.Encode(Model.SelectedDiagnosisId),
+       treCodeIds = Json.Encode(Model.SelectedTypeId),
+       checkedTreCodes = Json.Encode(Model.CheckedTreatment),
+       serviceTypeId = Model.TypeOfServiceId,
+       noOfRadioButtons = Model.NoOfRadioButtons,
+       radioButtons = Json.Encode(favoriteRadioButtons),
+       selFavorite = Json.Encode(favRadioButtons)
+   }, new { @class = "btn btn-default" })
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-10">
+                <input type="submit" value="Bekräfta kodval" class="btn btn-default" />
+            </div>
+        </div>*@
+    @*<div>
+            @Html.ActionLink("Ångra", "CodeSelector", "Treatments")
+        </div>*@
+
+    <div>
+        <a href="https://www.gemboxsoftware.com/bundle/free-version" target="_blank" style="font-size: 5px; text-decoration: none">Exported to XLSX using GemBox.Bundle Free .NET components.</a>
+    </div>
+
+}
+
